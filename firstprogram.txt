@@ -1,0 +1,26 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_FIRST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_FIRST.
+
+DATA v_name TYPE c LENGTH 10.
+DATA qty TYPE i.
+qty = '10.35'.
+WRITE qty.
+v_name = 'arusha'.
+WRITE :/'Name :'. WRITE v_name.
+DATA day TYPE dats.
+day = '20231010'.
+WRITE :/'Day :'. WRITE day.
+DATA q TYPE f.
+q = '10.45'.
+WRITE :/'float :'. WRITE q.
+DATA time TYPE t.
+time = '12:34'.
+WRITE :/'time :'. WRITE time.
+DATA char TYPE c.char = 'ghhj'.
+WRITE :/'character :'. WRITE char.
+DATA hex TYPE x.
+hex = 'A7'. WRITE :/'hexa :'. WRITE hex.

@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_STRUCTTASK2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_STRUCTTASK2.
+
+TYPES : BEGIN OF ty_makt,
+        name TYPE zarusha_makt-name,
+  END OF ty_makt.
+
+DATA : st_makt TYPE ty_makt.
+
+PARAMETERS p_depid TYPE zarusha_makt-dep_id.
+
+SELECT name FROM zarusha_makt INTO st_makt where dep_id EQ p_depid.
+
+WRITE : st_makt-name .
+ENDSELECT.

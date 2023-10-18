@@ -1,0 +1,80 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_SELECTOPTION_SALES
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_SELECTOPTION_SALES.
+
+TYPES: BEGIN  OF ty_vbap,
+  vbeln type vbap-vbeln,
+  posnr TYPE vbap-posnr,
+  pstyv TYPE vbap-pstyv,
+  arktx TYPE vbap-arktx,
+  kwmeng TYPE vbap-kwmeng,
+  zieme TYPE vbap-zieme,
+  netwr TYPE vbap-netwr,
+END  OF ty_vbap.
+  
+TYPES :BEGIN OF ty_vbak,
+       vbeln TYPE vbak-vbeln,
+       audat TYPE vbak-audat,
+       netwr TYPE vbak-netwr,
+       kunnr type vbak-kunnr,
+END OF ty_vbak.
+
+TYPES : BEGIN OF ty_t006a,
+       msehi type t006a-msehi,
+       msehl type t006a-msehl,
+END OF ty_t006a.
+  
+TYPES : BEGIN OF ty_kna1 ,
+    kunnr type kna1-kunnr,
+    name1 type kna1-name1,
+END OF ty_kna1.
+  
+DATA : it_vbap TYPE table of ty_vbap,
+       wa_vbap LIKE LINE OF it_vbap,
+       it_vbak TYPE table of ty_vbak,
+       wa_vbak LIKE LINE OF it_vbak,
+       it_t006a TYPE TABLE OF ty_t006a,
+       wa_t006a like line of it_t006a,
+       it_kna1 TYPE TABLE OF ty_kna1,
+       wa_kna1 LIKE LINE OF it_kna1,
+       prevbeln TYPE vbap-vbeln.
+
+ 
+SELECT-OPTIONS s_num FOR wa_vbak-vbeln.
+SELECT  vbeln audat netwr kunnr FROM vbak INTO TABLE it_vbak WHERE vbeln IN s_num.
+SELECT  kunnr name1 FROM kna1 INTO TABLE it_kna1 FOR ALL ENTRIES IN it_vbak WHERE kunnr EQ it_vbak-kunnr.
+SELECT  vbeln posnr pstyv arktx kwmeng zieme netwr FROM vbap INTO TABLE it_vbap WHERE vbeln in s_num.
+SELECT msehi msehl FROM t006a INTO TABLE it_t006a FOR ALL ENTRIES IN it_vbap where spras Eq sy-langu AND msehi EQ it_vbap-zieme.
+
+LOOP AT it_vbap INTO wa_vbap.
+   IF wa_vbap-vbeln NE prevbeln.
+   READ TABLE it_vbak INTO wa_vbak WITH  KEY vbeln = wa_vbap-vbeln.
+   READ TABLE it_kna1 INTO wa_kna1 WITH KEY kunnr = wa_vbak-kunnr.
+
+     WRITE :/ 'Document Number:',wa_vbak-vbeln,/
+             'Doc Date:',wa_vbak-audat,/
+             'Net Val:',wa_vbak-netwr,/
+             'Sold To Party:',wa_kna1-name1.
+
+ 
+    WRITE :/ 'Item',
+         20 'Material',
+         35 'ItemDesc',
+         60 'Order Qty' ,
+         80 'UoM',
+         100 'NetVal'.
+    ENDIF.
+    
+   READ TABLE it_t006a INTO wa_t006a WITH KEY msehi = wa_vbap-zieme.
+
+   WRITE : / wa_vbap-posnr,
+            20 wa_vbap-pstyv,
+            35  wa_vbap-arktx,
+            50 wa_vbap-kwmeng,
+            80 wa_t006a-msehl,
+            90 wa_vbap-netwr.
+            prevbeln = wa_vbap-vbeln.
+  ENDLOOP.

@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_WEEKLYTASK_PROFIT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_WEEKLYTASK_PROFIT.
+
+PARAMETERS : p_amount type p DECIMALS 2,
+            p_proper TYPE p DECIMALS 2,
+            p_days TYPE i,
+            p_check AS CHECKBOX.
+
+DATA :famount TYPE p DECIMALS 2,
+      profit TYPE p DECIMALS 2.
+
+IF  p_check EQ 'X'.
+  profit = p_amount * ( p_proper / 100 ) * ( p_days  ).
+  famount = p_amount + profit.
+  ELSE.
+    famount = p_amount.
+    DO p_days TIMES.
+      profit = famount * p_proper / 100.
+      famount = famount + profit .
+      ENDDO.
+
+ENDIF.
+
+WRITE : 'Initial Amount : ', p_amount,
+        / 'Total Days :', p_days,
+        / 'Total Amount :',famount.

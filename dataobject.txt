@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_DATAOBJECT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_DATAOBJECT.
+
+DATA : v_f_name TYPE ZTY_GLOBAL,
+      v_m_name TYPE zty_global,
+      v_l_name TYPE ZTY_GLOBAL.
+
+v_f_name = 'arusha'.
+v_m_name = 'ann'.
+v_l_name = 'james'.
+WRITE :/'firstname:'. WRITE v_f_name.
+WRITE :/'middlename:'. WRITE v_m_name.
+WRITE :/'lastname:'. WRITE v_l_name.

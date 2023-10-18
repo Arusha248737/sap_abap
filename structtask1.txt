@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_STRUCTTASK
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_STRUCTTASK.
+
+TYPES : BEGIN OF ty_makt,
+        emp_id TYPE zarusha_makt-emp_id,
+        name TYPE zarusha_makt-name,
+        salary TYPE zarusha_makt-salary,
+        dep_id TYPE zarusha_makt-dep_id,
+      END OF ty_makt.
+
+
+DATA v_desc TYPE zarusha_depart-description.
+
+DATA : st_makt TYPE ty_makt.
+
+PARAMETERS p_empid TYPE zarusha_makt-emp_id.
+
+
+SELECT SINGLE emp_id name salary dep_id from zarusha_makt INTO st_makt WHERE emp_id EQ p_empid.
+
+select SINGLE description from zarusha_depart INTO v_desc WHERE dep_id EQ st_makt-dep_id.
+
+WRITE : st_makt-emp_id,
+        st_makt-name,
+        st_makt-salary,
+        st_makt-dep_id,
+        v_desc.

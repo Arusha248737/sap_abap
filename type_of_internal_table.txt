@@ -1,0 +1,110 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_INTERNALTABLETYPES
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_INTERNALTABLETYPES.
+
+*------------------------------------standard table------------------------
+TYPES : BEGIN OF ty_makt,
+        matnr TYPE makt-matnr,
+        spras TYPE makt-spras,
+        maktx TYPE makt-maktx,
+END OF ty_makt.
+*
+*DATA : it_makt TYPE SORTED TABLE OF ty_makt WITH UNIQUE KEY matnr spras,
+*      wa_makt LIKE LINE OF it_makt.
+*wa_makt-matnr = '500'.
+*wa_makt-spras = 'E'.
+*wa_makt-spras = 'Book'.
+*APPEND wa_makt to it_makt.
+*
+*wa_makt-matnr = '300'.
+*wa_makt-spras = 'E'.
+*wa_makt-spras = 'pencil'.
+*APPEND wa_makt to it_makt.
+*
+*
+*wa_makt-matnr = '200'.
+*wa_makt-spras = 'E'.
+*wa_makt-maktx = 'Book'.
+*APPEND wa_makt to it_makt.
+*
+*
+* wa_makt-matnr = '100'.
+* wa_makt-spras = 'E'.
+* wa_makt-maktx = 'Book'.
+* APPEND wa_makt to it_makt.
+*
+*SORT it_makt by matnr spras.
+*READ TABLE it_makt INTO wa_makt WITH KEY matnr = '200' spras = 'E' BINARY SEARCH.
+*WRITE : / wa_makt.
+*------------------------sort table-------------------
+*
+*
+*
+*
+*DATA : it_makt TYPE SORTED TABLE OF ty_makt WITH UNIQUE KEY matnr spras,
+*      wa_makt LIKE LINE OF it_makt.
+*wa_makt-matnr = '500'.
+*wa_makt-spras = 'E'.
+*wa_makt-spras = 'Book'.
+**APPEND wa_makt to it_makt.
+*INSERT wa_makt INTO TABLE it_makt.
+*
+*wa_makt-matnr = '300'.
+*wa_makt-spras = 'E'.
+*wa_makt-spras = 'pencil'.
+*INSERT wa_makt INTO TABLE it_makt.
+*
+*wa_makt-matnr = '200'.
+*wa_makt-spras = 'E'.
+*wa_makt-maktx = 'Book'.
+*INSERT wa_makt INTO TABLE it_makt.
+*
+* wa_makt-matnr = '100'.
+* wa_makt-spras = 'E'.
+* wa_makt-maktx = 'Book'.
+* INSERT wa_makt INTO TABLE it_makt.
+*
+*LOOP AT it_makt INTO wa_makt.
+*  WRITE : / wa_makt-matnr,
+*          wa_makt-spras,
+*           wa_makt-maktx.
+*ENDLOOP.
+
+*--------------------hash table---------------
+
+
+
+
+
+
+
+DATA : it_makt TYPE HASHED TABLE OF ty_makt WITH UNIQUE KEY matnr spras,
+      wa_makt LIKE LINE OF it_makt.
+wa_makt-matnr = '500'.
+wa_makt-spras = 'E'.
+wa_makt-spras = 'Book'.
+INSERT wa_makt INTO TABLE it_makt.
+
+wa_makt-matnr = '200'.
+wa_makt-spras = 'E'.
+wa_makt-spras = 'pencil'.
+INSERT wa_makt INTO TABLE it_makt.
+
+wa_makt-matnr = '300'.
+wa_makt-spras = 'E'.
+wa_makt-maktx = 'Book'.
+INSERT wa_makt INTO TABLE it_makt.
+
+ wa_makt-matnr = '100'.
+ wa_makt-spras = 'E'.
+ wa_makt-maktx = 'Book'.
+ INSERT wa_makt INTO TABLE it_makt.
+
+LOOP AT it_makt INTO wa_makt.
+  WRITE : / wa_makt-matnr,
+          wa_makt-spras,
+           wa_makt-maktx.
+ENDLOOP.

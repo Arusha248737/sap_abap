@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_STRUCTTASK3
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_STRUCTTASK3.
+
+TYPES : BEGIN OF ty_marc,
+        matnr TYPE marc-matnr,
+        werks TYPE marc-werks,
+  END OF ty_marc.
+
+  DATA v_name TYPE t001w-name1.
+
+ DATA : st_marc TYPE ty_marc.
+
+ PARAMETERS p_matnr TYPE marc-matnr.
+
+ WRITE : / 'Material Number',
+          40 'plant number',
+          50 'plant name'.
+
+ SELECT matnr werks FROM marc INTO st_marc WHERE matnr EQ p_matnr.
+
+ SELECT SINGLE name1 FROM t001w INTO v_name WHERE werks EQ st_marc-werks.
+
+  WRITE : / st_marc-matnr,
+        40 st_marc-werks,
+        50 v_name.
+  ENDSELECT.

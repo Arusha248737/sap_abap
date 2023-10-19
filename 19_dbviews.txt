@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_DBVIEW
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_DBVIEW.
+
+DATA : it_plant TYPE STANDARD TABLE OF zarusha_dbview,
+      wa_plant LIKE LINE OF it_plant.
+
+select-OPTIONS s_matnr FOR wa_plant-matnr.
+
+SELECT * FROM zarusha_dbview INTO TABLE it_plant WHERE matnr IN s_matnr.
+
+  LOOP AT it_plant INTO wa_plant.
+
+    WRITE : / wa_plant-matnr,
+             wa_plant-werks,
+             wa_plant-name1.
+    ENDLOOP.

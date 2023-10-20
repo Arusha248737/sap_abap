@@ -1,0 +1,37 @@
+
+*se91
+*create message class
+* in message section type messages.
+
+REPORT ZARUSHA_MESSAGE1 MESSAGE-ID zarusha_msg1. 
+or
+MESSAGE e000(zarusha_msg1).
+
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_MESSAGE1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_MESSAGE1.
+
+DATA : it_makt TYPE STANDARD TABLE OF makt,
+      wa_makt LIKE LINE OF it_makt.
+
+PARAMETERS p_matnr TYPE makt-matnr.
+
+At SELECTION-SCREEN.
+
+SELECT * FROM makt INTO TABLE it_makt WHERE matnr EQ p_matnr.
+
+IF sy-subrc IS NOT INITIAL.
+
+  MESSAGE e000(zarusha_msg1).
+ENDIF.
+
+START-OF-SELECTION.
+
+LOOP AT it_makt into wa_makt.
+  WRITE: / wa_makt-matnr,
+           wa_makt-spras,
+           wa_makt-maktx.
+ENDLOOP.

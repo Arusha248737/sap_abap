@@ -1,0 +1,50 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_SUBROUTIE_STRUCTURE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_SUBROUTIE_STRUCTURE.
+
+TYPES : BEGIN OF ty_makt,
+        matnr TYPE makt-matnr,
+        spras TYPE makt-spras,
+        maktx TYPE makt-maktx,
+END OF ty_makt.
+
+TYPES ty_t_makt TYPE STANDARD TABLE OF ty_makt.
+
+DATA : st_makt TYPE ty_makt.
+DATA it_makt TYPE STANDARD TABLE OF ty_makt.
+DATA : v_matnr TYPE makt-matnr,
+       v_spras TYPE makt-spras,
+       v_maktx TYPE makt-maktx.
+
+v_matnr = '000000000000000056'.
+v_spras = 'E'.
+
+PERFORM get_data USING v_matnr v_spras CHANGING v_maktx st_makt it_makt.
+
+WRITE v_maktx.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+
+
+  FORM get_data USING VALUE(p_v_matnr) TYPE makt-matnr
+       VALUE(p_v_spras) TYPE makt-spras
+       CHANGING VALUE(p_v_maktx) TYPE makt-maktx
+         p_st_makt TYPE ty_makt
+         p_it_makt TYPE ty_t_makt.
+
+
+  SELECT SINGLE maktx FROM makt INTO p_v_maktx WHERE matnr EQ p_v_matnr AND spras EQ p_v_spras.
+  SELECT SINGLE matnr spras maktx FROM makt INTO p_st_makt where matnr EQ p_v_matnr.
+  SELECT matnr spras maktx FROM makt INTO TABLE p_it_makt WHERE matnr EQ p_v_matnr.
+
+WRITE p_st_makt-matnr.
+ENDFORM.

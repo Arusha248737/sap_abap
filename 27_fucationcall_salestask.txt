@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_FM_SALES_TASK
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_FM_SALES_TASK.
+
+DATA: it_header TYPE zarusha_t_header,
+      wa_header LIKE LINE OF it_header,
+      it_item TYPE  Zarusha_t_item,
+      wa_item LIKE LINE OF it_item,
+      it_vbak TYPE zarusha_table_vbak,
+      wa_vbak LIKE LINE OF it_vbak.
+*
+
+
+SELECT-OPTIONS s_num FOR wa_vbak-vbeln.
+
+ START-OF-SELECTION.
+
+           .
+CALL FUNCTION 'ZARUSHA_FM_HEADER1'
+  EXPORTING
+    im_vbeln       =   s_num[]
+ IMPORTING
+   E_HEADER       = it_header
+          .
+
+           .
+
+ CALL FUNCTION 'ZARUSHA_FM_HEADER_DISPALY'
+   EXPORTING
+     im_it_header       = it_header
+           .
+
+ END-OF-SELECTION.
+
+
+AT LINE-SELECTION.
+
+DATA : fnam(20),fval(50).
+DATA v_vbeln TYPE vbap-vbeln.
+GET CURSOR FIELD fnam VALUE fval.
+*fnam = wa_vbak-vbeln.
+
+CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+  EXPORTING
+    input        = fval
+ IMPORTING
+   OUTPUT        = v_vbeln.
+
+  CALL FUNCTION 'ZARUSHA_FM_ITEM'
+    EXPORTING
+      im_v_vbeln       =   v_vbeln
+   IMPORTING
+     E_ITEM           = it_item
+            .
+
+  CALL FUNCTION 'ZARUSHA_FM_ITEM_DISPLAY'
+    EXPORTING
+      im_it_item       =  it_item
+            .
+
+
+
+
+*PERFORM items USING v_vbeln CHANGING it_vbap it_t006a.

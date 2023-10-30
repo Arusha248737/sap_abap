@@ -1,0 +1,30 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_FM_CALL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_FM_CALL.
+
+DATA st_makt TYPE makt.
+PARAMETERS p_matnr TYPE makt-matnr.
+
+CALL FUNCTION 'ZARUSHA_FM'
+  EXPORTING
+    im_matnr               =  p_matnr
+ IMPORTING
+   EX_MAKT                = st_makt
+ EXCEPTIONS
+   INVALID_MATERIAL       = 1
+   OTHERS                 = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+  CASE sy-subrc.
+    WHEN 1.
+      MESSAGE 'Invalid Material' TYPE 'E'.
+
+      WHEN OTHERS.
+    ENDCASE.
+ENDIF.
+
+WRITE : st_makt-matnr, st_makt-spras, st_makt-maktx.

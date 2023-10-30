@@ -1,0 +1,107 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_SUBROUTIE_SALES_TASK
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_SUBROUTIE_SALES_TASK.
+
+*
+
+DATA :it_header TYPE zarusha_t_header,
+      wa_header LIKE LINE OF it_header,
+      it_item   TYPE zarusha_t_item,
+      wa_item   LIKE LINE OF it_item.
+
+
+
+SELECT-OPTIONS s_num FOR wa_header-vbeln.
+
+START-OF-SELECTION.
+
+  PERFORM header IN PROGRAM ZARUSHA_SUBROUTIES_TASK1 USING s_num[] CHANGING it_header.
+  PERFORM display_header.
+
+END-OF-SELECTION.
+
+AT LINE-SELECTION.
+  DATA : fnam(20),fval(50).
+  DATA v_vbeln TYPE vbap-vbeln.
+  GET CURSOR FIELD fnam VALUE fval.
+
+  PERFORM conversion.
+
+clear it_item.
+
+  PERFORM item IN PROGRAM ZARUSHA_SUBROUTIES_TASK1 USING v_vbeln CHANGING it_item.
+  PERFORM display_item.
+
+
+*&---------------------------------------------------------------------*
+*& Form display_header
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_header .
+  WRITE :/20 'Document Number',
+      40 'Doc Date',
+      70 'Net Val',
+      90 'Sold To Party'.
+
+  LOOP AT it_header INTO wa_header.
+    WRITE : /20 wa_header-vbeln,
+              40 wa_header-audat,
+             70 wa_header-netwr LEFT-JUSTIFIED,
+              90 wa_header-name1.
+  ENDLOOP.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form display_item
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_item .
+  LOOP AT it_item INTO wa_item.
+    AT FIRST.
+      WRITE :/ 'Item',
+           20 'Material',
+           35 'ItemDesc',
+    60 'Order Qty' ,
+     80 'UoM',
+     100'NetVal'.
+    ENDAT.
+    WRITE : / wa_item-posnr,
+             20 wa_item-pstyv,
+             35  wa_item-arktx,
+             50 wa_item-kwmeng,
+             80 wa_item-msehi,
+             90 wa_item-netwr.
+AT END OF vbeln.
+     SUM.
+     WRITE : /50 wa_ITEM-kwmeng,
+          90 wa_ITEM-netwr.
+   ENDAT.
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form conversion
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM conversion .
+
+  CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+    EXPORTING
+      input  = fval
+    IMPORTING
+      output = v_vbeln.
+ENDFORM.

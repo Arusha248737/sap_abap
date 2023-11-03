@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_PROCEDURE_CALL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_PROCEDURE_CALL.
+
+*PERFORM display IN PROGRAM ZARUSHA_PROCEDURE.
+
+*SUBMIT ZARUSHA_PROCEDURE.
+
+DATA v_date TYPE sy-datum.
+v_date = sy-datum.
+WRITE v_date.
+AT LINE-SELECTION.
+  EXPORT v_date to MEMORY id 'ARUSHA'.
+  SET PARAMETER ID 'ARUSHA' FIELD v_date.
+  SUBMIT ZARUSHA_PROCEDURE AND RETURN.
+  WRITE 'hello'.

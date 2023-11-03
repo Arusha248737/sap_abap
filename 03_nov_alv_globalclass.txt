@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_OO_ALV_GLOBAL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_OO_ALV_GLOBAL.
+DATA it_makt TYPE STANDARD TABLE OF makt.
+
+DATA o_alv TYPE REF TO CL_SALV_TABLE.
+
+SELECT * FROM makt INTO TABLE it_makt.
+
+cl_salv_table=>factory(
+*  EXPORTING
+*    list_display   = if_salv_c_bool_sap=>false " ALV Displayed in List Mode
+*    r_container    =                           " Abstract Container for GUI Controls
+*    container_name =
+  IMPORTING
+    r_salv_table   =  o_alv                    " Basis Class Simple ALV Tables
+  CHANGING
+    t_table        = it_makt
+).
+*CATCH cx_salv_msg. " ALV: General Error Class with Message
+
+o_alv->display( ).

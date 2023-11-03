@@ -1,0 +1,69 @@
+*&---------------------------------------------------------------------*
+*& Report ZARUSHA_OOO_DEMO
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZARUSHA_OOO_DEMO.
+
+**create class
+*CLASS cl_counter DEFINITION.
+*
+*  PUBLIC SECTION.
+*  DATA count TYPE i.
+*
+**  create method
+*  METHODS next_number EXPORTING number TYPE i.
+*
+*  PROTECTED SECTION.
+*
+*  PRIVATE SECTION.
+*
+*ENDCLASS.
+
+*implementation
+*CLASS cl_counter IMPLEMENTATION.
+*
+*  METHOD next_number.
+*    number = count + 1.
+*    count = number.
+*  ENDMETHOD.
+*ENDCLASS.
+
+
+DATA : v_doc TYPE i,
+       v_tag TYPE i.
+
+*DATA : o_doc TYPE REF TO cl_counter,
+*       o_tag TYPE REF TO cl_counter.
+DATA : o_doc TYPE REF TO ZCL_ARUSHA_COUNTER,
+       o_tag TYPE REF TO ZCL_ARUSHA_COUNTER.
+
+
+START-OF-SELECTION.
+
+CREATE OBJECT o_doc.
+CREATE OBJECT o_tag.
+
+o_doc->next_number(
+  IMPORTING
+    number = v_doc
+).
+
+o_tag->next_number(
+  IMPORTING
+    number = v_tag
+).
+o_tag->next_number(
+  IMPORTING
+    number = v_tag
+).
+
+o_doc->next_number(
+  IMPORTING
+    number = v_doc
+).
+
+o_tag->next_number(
+  IMPORTING
+    number = v_tag
+).
